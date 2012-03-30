@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="sudoku" default="build">
+
+    <property name="build.dir" location="." />
+    <property name="main.src.dir" location="${build.dir}/src/coffee" />
+    <property name="main.web.dir" location="${build.dir}/src/web" />
+    <property name="test.src.dir" location="${build.dir}/test" />
+    <property name="test.runner.dir" location="${build.dir}/test/runner" />
+
+    <property name="target.dir" location="${build.dir}/target" />
+    <property name="target.dir.web" location="${target.dir}/sudoku" />
+    <property name="target.dir.web.js" location="${target.dir.web}/js" />
+    <property name="target.dir.test" location="${target.dir}/sudoku-test" />
+
+    <target name="clean">
+        <delete dir="${target.dir}" />
+    </target>
+
+    <target name="prepare">
+        <mkdir dir="${target.dir.web.js}" />
+        <mkdir dir="${target.dir.test}/js" />
+    </target>
+
+    <target name="build" depends="clean,prepare">
+        <copy todir="${target.dir.web}">
+            <fileset dir="${main.web.dir}"/>
+        </copy>
+        <coffee src-dir="${main.src.dir}" target-dir="${target.dir.web.js}/app.js" />
+    </target>
+
+    <target name="build-tests" depends="clean,prepare,build">
+        <copy todir="${target.dir.test}">
+            <fileset dir="${test.runner.dir}" />
+        </copy>
+        <copy todir="${target.dir.test}/js">
+            <fileset dir="${target.dir.web.js}" />
+        </copy>
+        <coffee-bare src-dir="${test.src.dir}" target-dir="${target.dir.test}/js/test.js" />
+    </target>
+
+    <macrodef name="coffee">
+        <attribute name="src-dir" />
+        <attribute name="target-dir" />
+        <sequential>
+            <exec executable="coffee">
+                <arg value="-j" />
+                <arg value="@{target-dir}" />
+                <arg value="-c" />
+                <arg value="@{src-dir}" />
+            </exec>
+        </sequential>
+
+    </macrodef>
+
+    <macrodef name="coffee-bare">
+        <attribute name="src-dir" />
+        <attribute name="target-dir" />
+        <sequential>
+            <exec executable="coffee">
+                <arg value="-b" />
+                <arg value="-j" />
+                <arg value="@{target-dir}" />
+                <arg value="-c" />
+                <arg value="@{src-dir}" />
+            </exec>
+        </sequential>
+
+    </macrodef>
+
+</project>
