@@ -5,7 +5,6 @@
     <property name="main.src.dir" location="${build.dir}/src/coffee" />
     <property name="main.web.dir" location="${build.dir}/src/web" />
     <property name="test.src.dir" location="${build.dir}/test" />
-    <property name="test.runner.dir" location="${build.dir}/test/runner" />
 
     <property name="target.dir" location="${build.dir}/target" />
     <property name="target.dir.web" location="${target.dir}/sudoku" />
@@ -18,7 +17,7 @@
 
     <target name="prepare">
         <mkdir dir="${target.dir.web.js}" />
-        <mkdir dir="${target.dir.test}/js" />
+        <mkdir dir="${target.dir.test}" />
     </target>
 
     <target name="build" depends="clean,prepare">
@@ -29,13 +28,16 @@
     </target>
 
     <target name="build-tests" depends="clean,prepare,build">
-        <copy todir="${target.dir.test}">
-            <fileset dir="${test.runner.dir}" />
-        </copy>
         <copy todir="${target.dir.test}/js">
             <fileset dir="${target.dir.web.js}" />
         </copy>
         <coffee-bare src-dir="${test.src.dir}" target-dir="${target.dir.test}/js/test.js" />
+    </target>
+
+    <target name="test" depends="build-tests">
+        <exec executable="expresso">
+            <arg value="target/sudoku-test/js/test.js" />
+        </exec>
     </target>
 
     <macrodef name="coffee">

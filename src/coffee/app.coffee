@@ -1,18 +1,23 @@
 class Cell
-  constructor: (@containers) ->
+  constructor: (@containers, @x, @y) ->
     @possibilities = [1..9]
     @solved = false
     container.cells.push(@) for container in @containers
 
-  @eliminate: (val) ->
+  eliminate: (val) ->
     unless @solved
       @possibilities.splice(@possibilities.indexOf(val), 1)
       @solved = @possibilities.length == 1
       @value = @possibilities[0]
     @solved
 
+  toString: ->
+    val = "cell: #{@containers}"
+
+
+
 class Container
-  constructor: ->
+  constructor: (@name) ->
     @cells = []
 
   contains: (val) ->
@@ -21,21 +26,24 @@ class Container
         return true
     return false
 
+  toString: ->  @name
+
 class Grid
   constructor: ->
 
     @rows  = []
     @colls = []
     @boxes = []
+    @cells = []
 
     for i in [1..9]
-      @rows[i] = new Container()
-      @colls[i] = new Container()
-      @boxes[i] = new Container()
+      @rows[i] = new Container("row #{i}")
+      @colls[i] = new Container("col #{i}")
+      @boxes[i] = new Container("box #{i}")
 
     for y in [1..9]
       for x in [1..9]
-        new Cell([@rows[x], @colls[y], @boxes[@toBox(x,y) ]])
+        @cells.push(new Cell([@colls[x], @rows[y], @boxes[@toBox(x,y) ]], x, y))
 
   toBox:(x,y) ->
     1 + 3 * Math.floor((y - 1) / 3) + Math.floor((x - 1) / 3)
@@ -52,14 +60,19 @@ class UniquenessRule
         unless container.contains(val)
           break if cell.eliminate(val)
 
-exports = exports || window
 
-exports.Sudoku =
-  Cell : Cell
-  Container : Container
-  Grid : Grid
-  Rule : Rule
-  UniquenessRule : UniquenessRule
+if exports?
+  root = module.exports
+else
+  root = {}
+  window.Sudoku = root
+
+module.exports =
+  'Cell' : Cell
+  'Container' : Container
+  'Grid' : Grid
+  'Rule' : Rule
+  'UniquenessRule' : UniquenessRule
 
 
 
