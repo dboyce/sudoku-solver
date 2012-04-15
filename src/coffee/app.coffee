@@ -1,3 +1,16 @@
+##########################################
+# Utils
+##########################################
+
+class ArrayUtil
+  remove: (array, element) ->
+    index = array.indexOf(element)
+    array.splice(index, 1) if index isnt -1
+
+
+##########################################
+# Represents a grid cell
+##########################################
 class Cell
   constructor: (@containers, @x, @y) ->
     @possibilities = [1..9]
@@ -8,7 +21,8 @@ class Cell
   eliminate: (val) ->
 
     unless @solved
-      @possibilities.splice(@possibilities.indexOf(val), 1)
+#      console.log("#{@} eliminating #{val}")
+      ArrayUtil::remove(@possibilities, val)
       @eliminated[val] = true
       @solve val if @possibilities.length is 1
     @solved
@@ -26,10 +40,12 @@ class Cell
     not @solved and not @eliminated[val]?
 
   toString: ->
-    val = "cell: #{@containers}"
+    val = "cell #{@x},#{@y}"
 
 
-
+##########################################
+# Represents a row, column or grid
+##########################################
 class Container
   constructor: (@name) ->
     @cells = []
@@ -45,10 +61,15 @@ class Container
   cellSolved: (cell, val) ->
 #    console.log("cell solved: #{cell} -> #{val}")
     @solutions[val] = cell
-    @unsolvedValues.splice(@unsolvedValues.indexOf(val), 1)
+    ArrayUtil::remove(@unsolvedValues, val)
+    ArrayUtil::remove(cell.possibilities, val) for cell in @cells when not cell.solved
+    return null
 
   toString: ->  @name
 
+##########################################
+# Represents the grid
+##########################################
 class Grid
   constructor: ->
 
@@ -92,9 +113,11 @@ class OnlyPossibleCellRule
 
       candidate = null
 
-      for cell in container
+      for cell in container.cells
+        console.log "#{cell}"
         if cell.possibleValue val
           if candidate? # more than one candidate
+            console.log "more than one candidate for #{val} - #{cell} and #{candidate}"
             candidate = null
             break
           else
@@ -108,12 +131,14 @@ else
   root = {}
   window.Sudoku = root
 
-module.exports =
+Grid.api =
   'Cell' : Cell
   'Container' : Container
   'Grid' : Grid
   'UniquenessRule' : UniquenessRule
   'OnlyPossibleCellRule' : OnlyPossibleCellRule
+
+module.exports = Grid
 
 
 
