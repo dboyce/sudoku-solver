@@ -98,7 +98,7 @@ class Grid
 
 class UniquenessRule
 
-  apply: (container) ->
+  eval : (container) ->
 #    console.log("#{container} solutions: #{container.solutions}")
     for own val, solvedCell of container.solutions
 #      console.log("checking for uniqueness of #{val} in #{container.cells}")
@@ -108,16 +108,15 @@ class UniquenessRule
 
 class OnlyPossibleCellRule
 
-  apply: (container) ->
+  eval: (container) ->
     for val in container.unsolvedValues
 
       candidate = null
 
       for cell in container.cells
-        console.log "#{cell}"
         if cell.possibleValue val
           if candidate? # more than one candidate
-            console.log "more than one candidate for #{val} - #{cell} and #{candidate}"
+#            console.log "more than one candidate for #{val} - (#{cell.x}, #{cell.y}) and (#{candidate.x},#{candidate.y}"
             candidate = null
             break
           else

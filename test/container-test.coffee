@@ -36,7 +36,7 @@ describe "Container", ->
 
       container.unsolvedValues.should.not.include(9)
 
-    it "should notify other cells in the container that this value is solved", ->
+    it "should notify other cells in the container when a value is solved", ->
 
       solvedCell = { solved : true }
       someOtherCell = { possibilities: [1..9] }
