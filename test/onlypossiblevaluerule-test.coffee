@@ -1,4 +1,4 @@
-OnlyPossibleCellRule = require("../src/coffee/app").api.OnlyPossibleCellRule
+OnlyPossibleCellRule = require("../lib/sudoku").api.OnlyPossibleCellRule
 
 describe "OnlyPossibleCellRule", ->
 

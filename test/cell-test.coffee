@@ -1,5 +1,5 @@
 require "should"
-Cell = require("../src/coffee/app").api.Cell
+Cell = require("../lib/sudoku").api.Cell
 
 
 describe "Cell", ->

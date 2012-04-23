@@ -1,4 +1,5 @@
-Grid = require('../src/coffee/app').api.Grid
+should = require('should')
+Grid = require('../lib/sudoku').api.Grid
 
 check_containers = (cell, names) ->
   container.name.should.equal(names[i]) for container, i in cell.containers

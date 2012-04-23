@@ -1,5 +1,5 @@
 require "should"
-Container = require("../src/coffee/app").api.Container
+Container = require("../lib/sudoku").api.Container
 
 describe "Container", ->
 

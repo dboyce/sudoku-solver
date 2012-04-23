@@ -1,4 +1,4 @@
-UniquenessRule = require("../src/coffee/app").api.UniquenessRule
+UniquenessRule = require("../lib/sudoku").api.UniquenessRule
 
 describe "UniquenessRule", ->
 
