@@ -108,9 +108,13 @@ class Grid
     @cells[i].solve(val) for val, i in values when not (val is 0 or not val?)
 
   solve: ->
-    for container in ArrayUtil::flatten([ @rows, @colls, @boxes]) when container?
-      for rule in @rules
-        rule.eval(container)
+    done = false
+    while not done
+      unsolvedCells = @unsolvedCells
+      for container in ArrayUtil::flatten([ @rows, @colls, @boxes]) when container?
+        for rule in @rules
+          rule.eval(container)
+      done = unsolvedCells == @unsolvedCells
 
   toString: ->
 

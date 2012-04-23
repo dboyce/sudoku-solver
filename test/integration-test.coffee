@@ -26,7 +26,6 @@ console.log sudoku.toString()
 #(console.log "#{cell.x}, #{cell.y}: #{cell.possibilities}" for cell in sudoku.boxes[1].cells)
 
 sudoku.solve()
-sudoku.solve()
 
 console.log sudoku.toString()
 
