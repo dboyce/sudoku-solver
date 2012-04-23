@@ -7,7 +7,7 @@ describe "Container", ->
 
   beforeEach ->
 
-    container = new Container()
+    container = new Container('foo',{cellSolved:->})
 
   describe "#contains", ->
 
