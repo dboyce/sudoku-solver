@@ -165,12 +165,6 @@ class OnlyPossibleCellRule
 #      console.log "solving #{candidate.toString()} #{val}" if candidate?
       candidate.solve val if candidate?
 
-if exports?
-  root = module.exports
-else
-  root = {}
-  window.Sudoku = root
-
 Grid.api =
   'Cell' : Cell
   'Container' : Container
@@ -178,8 +172,10 @@ Grid.api =
   'UniquenessRule' : UniquenessRule
   'OnlyPossibleCellRule' : OnlyPossibleCellRule
 
-module.exports = Grid
-
+if exports?
+  module.exports = Grid
+else
+  window.Sudoku = Grid
 
 
 
