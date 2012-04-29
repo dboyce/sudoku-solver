@@ -31,7 +31,10 @@
         </form>
     </div>
     <script type="text/template" id="cell-template">
-        <input type="text" name="cell-<%= x + '-' + y %>" id="cell-<%= x + '-' + y %>" class="cell"/>
+
+        <input type="text" name="cell-<%= x + '-' + y %>" id="cell-<%= x + '-' + y %>" class="cell"
+            <% if(solved) { %> disabled="disabled"  value="<%=value%>" <% } %>
+        />
     </script>
     <script type="text/template" id="box-template">
         <% _.each(cellViews, function(cell, index) { %>

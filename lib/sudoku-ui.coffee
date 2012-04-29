@@ -6,16 +6,23 @@ $(document).ready ->
 
   class CellModel extends Backbone.Model
 
-    defaults: ->
-      content: "_"
-
     initialize: ->
+      cell = @get('cell')
+      @set(
+        solved: cell.solved,
+        value: cell.value
+      )
+
 
   class BoxModel extends Backbone.Model
 
     initialize: ->
-      @cells = (new CellModel(cell:cell) for cell in @get('box').cells)
-
+      unsorted = (new CellModel(cell:cell) for cell in @get('box').cells)
+      @cells = []
+      for col in [0..2]
+        for row  in [0,3,6]
+          @cells.push(unsorted[row + col])
+      @cells
 
 
   class SudokuGrid extends Backbone.Collection
@@ -65,6 +72,21 @@ $(document).ready ->
 
     initialize: ->
       @grid = new SudokuGrid()
+      @grid.sudoku.update (_) -> [
+
+        _, 6, _,  _, 9, 1,  _, 8, _,
+        1, _, 9,  6, 8, _,  4, _, 5,
+        _, 5, _,  _, 4, _,  1, _, 6,
+        #############################
+        6, _, _,  _, _, _,  2, _, _,
+        _, 2, 3,  9, _, 4,  7, 1, _,
+        _, _, 4,  _, _, _,  _, _, 3,
+        #############################
+        9, _, 7,  _, 2, _,  _, 3, _,
+        3, _, 5,  _, 7, 9,  6, _, 2,
+        _, 4, _,  1, 5, _,  _, 7, _,
+      ]
+
       @grid.bind('add', this.addCell)
       @grid.populate()
 
