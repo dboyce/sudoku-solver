@@ -1,18 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Sudoku Solver</title>
     <script type="application/javascript" src="js/jquery-1.7.2.min.js"></script>
     <script type="application/javascript" src="js/json2.js"></script>
     <script type="application/javascript" src="js/underscore-min.js"></script>
     <script type="application/javascript" src="js/backbone.js"></script>
     <script type="application/javascript" src="js/app.js"></script>
     <style type="text/css">
+        body {
+            font-family: 'Arial'
+        }
         input.cell {
             width: 1em;
             height: 1em;
+            border:none;
+        }
+        div#grid {
+            font-size: 110%;
+            margin-top: 3em;
+            margin-left: 30%;
         }
         div#grid table {
             float:left;
+        }
+        div#grid table td {
+            border: 1px solid grey;
+            padding: 0.5em;
         }
         table {
             border: 1px solid black;
@@ -27,13 +41,20 @@
 </head>
 <body>
     <div id="grid">
-        <form id="sudoku-form" onsubmit="javascript:false">
-        </form>
-        <button type="submit" id="solve">Solve</button>
+        <h1>Sudoku Solver</h1>
+        <div>
+            <form id="sudoku-form" onsubmit="javascript:false">
+            </form>
+        </div>
+        <div style="clear:left;padding:1em 0em;">
+            <button type="submit" id="solve">Solve</button>
+            <button type="reset" id="reset">Reset</button>
+            <select id="demo" name="demo">
+                <option value="" disabled="disabled">Demo Grid</option>
+            </select>
+        </div>
     </div>
-    <div id="controls">
-
-    </div>
+    
     <script type="text/template" id="cell-template">
 
         <input type="text" name="cell-<%= x + '-' + y %>" id="cell-<%= x + '-' + y %>" class="cell"

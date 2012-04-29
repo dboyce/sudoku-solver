@@ -70,7 +70,10 @@ $(document).ready ->
 
     classes: ["left", "middle", "right"]
 
-    attributes: -> 'class' : @classes[ (@model.get('number') - 1) % 3 ]
+    attributes: ->
+      'class' : @classes[ (@model.get('number') - 1) % 3 ]
+      'cellspacing' : 0
+      'cellpadding' : 0
 
     initialize: -> @cellViews = (new CellView(model:cellModel) for cellModel in @model.cells)
 
@@ -86,31 +89,32 @@ $(document).ready ->
     el: $("#grid")
 
     events:
-      "click #solve" : "solve"
+      "click #solve" : "solve",
+      "click #reset" : "reset"
 
     solve: ->
       @grid.sudoku.solve()
 
+    reset: ->
+      $('#sudoku-form').children().remove()
+      @initialize()
+
+    loadDemos: ->
+      $demo = $('#demo')
+      demos = SudokuSolverDemos::demos
+      for name of demos
+        $("<option>#{name}</option>").appendTo($demo)
+      $demo.change =>
+        factory = SudokuSolverDemos::demos[$demo.val()]
+        if factory?
+          @reset()
+          @grid.sudoku.update(factory)
 
     initialize: ->
       @grid = new SudokuGrid()
-#      @grid.sudoku.update (_) -> [
-#
-#        _, 6, _,  _, 9, 1,  _, 8, _,
-#        1, _, 9,  6, 8, _,  4, _, 5,
-#        _, 5, _,  _, 4, _,  1, _, 6,
-#        #############################
-#        6, _, _,  _, _, _,  2, _, _,
-#        _, 2, 3,  9, _, 4,  7, 1, _,
-#        _, _, 4,  _, _, _,  _, _, 3,
-#        #############################
-#        9, _, 7,  _, 2, _,  _, 3, _,
-#        3, _, 5,  _, 7, 9,  6, _, 2,
-#        _, 4, _,  1, 5, _,  _, 7, _,
-#      ]
-
       @grid.bind('add', this.addCell)
       @grid.populate()
+      @loadDemos() if $('#demo').children().length < 2
 
     addCell: (box) =>
       box = new BoxView( {model:box} )
