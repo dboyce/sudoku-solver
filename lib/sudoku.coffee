@@ -35,6 +35,7 @@ class Cell
       @solved = true
       @possibilities = []
       container.cellSolved(@, val) for container in @containers
+      @listener(val, @) if @listener?
     @solved
 
   possibleValue: (val) ->
