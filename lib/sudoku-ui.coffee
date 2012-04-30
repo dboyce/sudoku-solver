@@ -1,5 +1,11 @@
 $(document).ready ->
 
+  class StringUtil
+    trim: (val)->
+      val?.replace /^\s+|\s+$/g, ""
+    isNumber: (n) ->
+      !isNaN(parseFloat(n)) and isFinite(n)
+
   #########################################
   # models/collections
   #########################################
@@ -16,6 +22,9 @@ $(document).ready ->
         solved: @cell.solved
         value: @cell.value
       )
+
+    possibleValue: (val) ->
+      @cell.possibleValue(val)
 
 
   class BoxModel extends Backbone.Model
@@ -53,8 +62,16 @@ $(document).ready ->
       "change input.cell": "update"
 
     update: ->
-      @model.cell.solved = false
-      @model.cell.solve(+($(@el).find('input').val()))
+      input = $(@el).find('input')
+      $(@el).removeClass('error')
+      val = StringUtil::trim(input.val())
+      return if not val?
+      if !StringUtil::isNumber(val) or +val < 1 or +val > 9 or not @model.possibleValue(+val)
+        $(@el).addClass('error')
+        input.val('  ' + input.val())
+      else
+        @model.cell.solved = false
+        @model.cell.solve(+($(@el).find('input').val()))
 
     initialize: ->
       @model.on('change', @render)
