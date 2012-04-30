@@ -12,8 +12,8 @@
             font-family: 'Arial'
         }
         input.cell {
-            width: 1em;
-            height: 1em;
+            width: 2em;
+            height: 2em;
             border:none;
         }
         div#grid {
@@ -26,7 +26,7 @@
         }
         div#grid table td {
             border: 1px solid grey;
-            padding: 0.5em;
+            padding: 0em;
         }
         table {
             border: 1px solid black;
@@ -58,7 +58,7 @@
     <script type="text/template" id="cell-template">
 
         <input type="text" name="cell-<%= x + '-' + y %>" id="cell-<%= x + '-' + y %>" class="cell"
-            <% if(solved) { %> value="<%=value%>" <% } %>
+            <% if(solved) { %> value="<%='  ' + value%>" <% } %>
         />
     </script>
 </body>
