@@ -65,8 +65,11 @@ $(document).ready ->
       input = $(@el).find('input')
       $(@el).removeClass('error')
       val = StringUtil::trim(input.val())
-      return if not val?
-      if !StringUtil::isNumber(val) or +val < 1 or +val > 9 or not @model.possibleValue(+val)
+      if not val?.length
+        @model.cell.solved = false
+        @model.cell.possibilities = [1..9]
+        input.val('')
+      else if !StringUtil::isNumber(val) or +val < 1 or +val > 9 or not @model.possibleValue(+val)
         $(@el).addClass('error')
         input.val('  ' + input.val())
       else
